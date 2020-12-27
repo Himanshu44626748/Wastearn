@@ -1,1 +1,1 @@
-# Wastearn
+# WastEarn
