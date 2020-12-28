@@ -1,0 +1,10 @@
+.mylist:hover{
+    color: #f347a0 !important;
+}
+@media only screen and (max-width: 600px)
+{
+    #whyrecyc{
+        margin-top: 5% !important;
+        text-align: center;
+    }
+}
