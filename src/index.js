@@ -23,6 +23,14 @@ const schema = new mongoose.Schema({
     img: String
 });
 
+const schem = new mongoose.Schema({
+    name: String,
+    address: String,
+    description: String,
+    email: String,
+    phone: Number
+});
+
 var storage = multer.diskStorage({
     destination: "./public/uploads/",
     filename: (req, file, cb) => {
@@ -33,6 +41,7 @@ var storage = multer.diskStorage({
 const upload = multer({storage: storage}).single("image");
 
 const seller = new mongoose.model("Seller", schema);
+const buyer = new mongoose.model("Buyer", schem);
 
 app.use(bodyParser.urlencoded({extended: false}));
 
@@ -58,6 +67,10 @@ app.get("/company", (req, res) => {
     res.render("company");
 });
 
+app.get("/buy", (req, res) => {
+    res.render("buy");
+})
+
 app.post("/sell", upload, async (req, res) => {
     
     const newSeller = new seller({
@@ -68,6 +81,16 @@ app.post("/sell", upload, async (req, res) => {
         phone: req.body.phone,
         img: req.file.filename
     })
+
+app.post("/buy", upload, async (req, res) => {
+    const newBuyer = new newBuyer({
+        name: req.body.name,
+        city: req.body.city,
+        address: req.body.address,
+        description: req.body.description,
+        phone: req.body.phone
+    })
+})
 
     const result = await newSeller.save();
 
