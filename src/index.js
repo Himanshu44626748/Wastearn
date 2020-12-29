@@ -6,6 +6,7 @@ const nodemailer = require("nodemailer");
 const bodyParser = require("body-parser");
 const app = express();
 const multer = require("multer");
+const port = process.env.PORT || 8000;
 
 mongoose.connect("mongodb+srv://himanshu446267:44626748@cluster0.76uy4.mongodb.net/himanshu?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true})
 .then(() => {
@@ -160,6 +161,6 @@ app.post("/sell", upload, async (req, res) => {
     }
 });
 
-app.listen(8000, () => {
+app.listen(port, () => {
     console.log("Server is running on port number 8000");
 });
