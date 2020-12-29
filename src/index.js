@@ -14,6 +14,14 @@ mongoose.connect("mongodb+srv://himanshu446267:44626748@cluster0.76uy4.mongodb.n
     console.log(error);
 });
 
+const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: "himanshu201952215@gmail.com",
+        pass: "201952215"
+    }
+})
+
 const schema = new mongoose.Schema({
     name: String,
     address: String,
@@ -69,18 +77,38 @@ app.post("/sell", upload, async (req, res) => {
         img: req.file.filename
     })
 
-    const result = await newSeller.save();
+    const result = false; //await newSeller.save();
 
     if(result){
+
+        const mailOption = {
+            from: req.body.email,
+            to: "himanshu446267@gmail.com",
+            subject: "Waste Found",
+            text: `${req.body.name} is selling their waste please collect it from ${req.body.address}. His contact number is - ${req.body.phone} and Email id is - ${req.body.email}`
+        }
+
         console.log("Data successfully inserted");
+
+        res.render("form", {
+            successMsg: "Thank you for recycling your waste"
+        });
+        
+        transporter.sendMail(mailOption, (error, info) => {
+            if(error){
+                console.log(error);
+            }else{
+                console.log("Mail send");
+            }
+        })
     }
     else{
         console.log("Fail to insert data");
-    }
 
-    res.render("form", {
-        h1: "Registered successfully"
-    });
+        res.render("form", {
+            failMsg: "Service is currently not available in your area"
+        });
+    }
 });
 
 app.listen(8000, () => {
