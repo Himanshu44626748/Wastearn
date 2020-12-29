@@ -22,13 +22,21 @@ const transporter = nodemailer.createTransport({
     }
 })
 
-const schema = new mongoose.Schema({
+const sellerSchema = new mongoose.Schema({
     name: String,
-    address: String,
+    city: String,
     description: String,
     email: String,
     phone: Number,
     img: String
+});
+
+const buyerSchema = new mongoose.Schema({
+    orgName: String,
+    city: String,
+    description: String,
+    email: String,
+    phone: Number
 });
 
 var storage = multer.diskStorage({
@@ -40,7 +48,8 @@ var storage = multer.diskStorage({
 
 const upload = multer({storage: storage}).single("image");
 
-const seller = new mongoose.model("Seller", schema);
+const seller = new mongoose.model("Seller", sellerSchema);
+const buyer = new mongoose.model("Buyer", buyerSchema);
 
 app.use(bodyParser.urlencoded({extended: false}));
 
@@ -66,45 +75,85 @@ app.get("/company", (req, res) => {
     res.render("company");
 });
 
-app.post("/sell", upload, async (req, res) => {
-    
-    const newSeller = new seller({
-        name: req.body.name,
-        address: req.body.address,
+app.get("/buy", (req, res) => {
+    res.render("buy");
+})
+
+app.post("/company", async (req, res) => {
+
+    const newBuyer = new buyer({
+        orgName: req.body.orgName,
+        city: req.body.city,
         description: req.body.description,
         email: req.body.email,
-        phone: req.body.phone,
-        img: req.file.filename
-    })
+        phone: req.body.phone
+    });
 
-    const result = false; //await newSeller.save();
+    const result = await newBuyer.save();
+    console.log(req.body.email);
 
     if(result){
-
-        const mailOption = {
-            from: req.body.email,
-            to: "himanshu446267@gmail.com",
-            subject: "Waste Found",
-            text: `${req.body.name} is selling their waste please collect it from ${req.body.address}. His contact number is - ${req.body.phone} and Email id is - ${req.body.email}`
-        }
 
         console.log("Data successfully inserted");
 
         res.render("form", {
-            successMsg: "Thank you for recycling your waste"
+            successMsg: "Registered Successfully"
         });
-        
-        transporter.sendMail(mailOption, (error, info) => {
-            if(error){
-                console.log(error);
-            }else{
-                console.log("Mail send");
-            }
-        })
     }
     else{
         console.log("Fail to insert data");
 
+        res.render("form", {
+            failMsg: "Failed to registered. Please try again"
+        });
+    }
+
+})
+
+var match = false;
+
+app.post("/sell", upload, async (req, res) => {
+    
+    try{
+        const newSeller = new seller({
+            name: req.body.name,
+            city: req.body.city,
+            description: req.body.description,
+            email: req.body.email,
+            phone: req.body.phone,
+            img: req.file.filename
+        })
+    
+        const result = await newSeller.save();
+    
+        const orgCity = await buyer.find({city: req.body.city}).select({email:1, city:1, _id: 0});
+        console.log(orgCity);
+    
+        if(orgCity[0].city)
+        {
+        
+            const mailOption = {
+                from: req.body.email,
+                to: orgCity[0].email,
+                subject: "Waste Found",
+                text: `${req.body.name} is selling their waste please collect it from ${req.body.city}. His contact number is - ${req.body.phone} and Email id is - ${req.body.email}`
+            }
+    
+            console.log("Data successfully inserted");
+    
+            res.render("form", {
+                successMsg: "Thank you for recycling your waste"
+            });
+            
+            transporter.sendMail(mailOption, (error, info) => {
+                if(error){
+                    console.log(error);
+                }else{
+                    console.log("Mail send");
+                }
+            })
+        }
+    }catch(error){
         res.render("form", {
             failMsg: "Service is currently not available in your area"
         });
