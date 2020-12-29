@@ -4,10 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="css/formstyle.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="css/style.css" type="text/css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <title>wasteEarn</title>
 </head>
 <body>
 
@@ -34,7 +43,7 @@
                             </div>
                             
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Address*" value="" id="address" name="address"/>
+                                <input type="text" class="form-control" placeholder="City*" value="" id="address" name="city"/>
                             </div>
                             <div class="form-group">
                                 <input type="text" class="form-control"  placeholder="description*" value="" id="desc" name="description"/>
@@ -56,6 +65,8 @@
                             
                             <input type="submit" class="btnRegister"  value="Submit"/>
                         </div>
+                        <h5 class="text-success" style="text-align: center;">{{successMsg}}</h5>
+                        <h5 class="text-danger" style="text-align: center;">{{failMsg}}</h5>
                     </div>
                     </form>
                     </div>
@@ -68,7 +79,7 @@
 
 </div>
 
-<h5 class="text-success" style="text-align: center;">{{h1}}</h5>
+{{>footer}}
 
 </body>
 </html>

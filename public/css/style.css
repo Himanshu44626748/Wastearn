@@ -6,16 +6,27 @@
 body{
     font-family: "Open Sans";
 }
+@media only screen and (max-width: 600px)
+{
+    #whyrecyc{
+        margin-top: 5% !important;
+        text-align: center;
+    }
+}
 main{
-    height: 70vh;
+    height: 100vh;
 }
 footer{
-    background: #32eb9e;
-    padding: 50px 20px;
+    background: #0bb163;
+   
+    position: sticky;
+    
+   
+    top: calc( 100vh - 100px );
 }
 footer .container{
     width: 100%;
-    max-width: 1100px;
+    padding-top: 3%;
     margin: 0 auto;
     display: flex;
     align-items: flex-start;
