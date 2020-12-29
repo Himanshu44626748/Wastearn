@@ -1,12 +1,18 @@
 # WastEarn
 
-## Contributors :
-Himanshu Mishra, Parth Sarode, Nikhil Singh, Deepak Parihar
+# Contributors :
+Himanshu Mishra
+Parth Sarode
+Nikhil Singh
+Deepak Parihar
 
 ### list of technologies used :
- HTML, CSS, BOOTSTRAP, NODE, JAVASCRIPT, MONGODB, GITHUB, 
-
+HTML
+CSS
+JAVASCRIPT
+BOOTSTRAP
+NODE
+GITHUB
 
 ### Working :
-Users will upload the waste materials images and its description into the website which will be recycled by the organisation/company in their own or nearest city.
-
+Users will register into the website and upload picture of the waste they have which will be recycled or buyed by the organisation or the company.
