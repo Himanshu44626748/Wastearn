@@ -155,8 +155,9 @@ app.post("/sell", upload, async (req, res) => {
             })
         }
     }catch(error){
+
         res.render("form", {
-            failMsg: "Service is currently not available in your area"
+            failMsg: "Service is currently not available in your city"
         });
     }
 });
