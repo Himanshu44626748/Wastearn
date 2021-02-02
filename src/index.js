@@ -6,7 +6,52 @@ const nodemailer = require("nodemailer");
 const bodyParser = require("body-parser");
 const app = express();
 const multer = require("multer");
+const StreamrClient = require('streamr-client')
 const port = process.env.PORT || 8000;
+// const firebase = require("firebase");
+const { auth } = require("./firebase");
+const privatekey = 'fc8f0ba4f6e15133610ae5ca19d34de270280ed60dadf494f052a2878fb5515c'
+const SHARED_SECRET = 'xd5Y8XmDT-OArm3gjxgfGgydnt5FwcQ8yamal29m9Dsw'
+const DU_CONTRACT = '0x2bca3b92f79d7ffb5f5a3cfa8dbcafd90a36def3'
+const STREAM_ID = '0x7b3fe72fd7a05839bd122c5cefc9964d15225aba/wastearn/v2'
+const WALLET_ADDRESS = '0x7B3Fe72Fd7A05839bd122c5CeFC9964d15225ABA'
+
+
+
+const streamr = new StreamrClient({
+    auth: {
+        privateKey: privatekey
+    },
+    url: 'wss://hack.streamr.network/api/v1/ws',
+    restUrl: 'https://hack.streamr.network/api/v1',
+})
+
+
+streamr.joinDataUnion(DU_CONTRACT, SHARED_SECRET)
+.then((memberDetails) => {
+        // console.log(memberDetails);
+
+        streamr.getMemberStats(DU_CONTRACT, WALLET_ADDRESS)
+            .then((stats) => {
+                // console.log(stats);
+            })
+            .catch((err) => {
+                console.log(err.message);
+            })
+    })
+    .catch((err) => {
+        console.log(err.message);
+    })
+    
+
+function pushDataToStream(userName) {
+
+    streamr.publish(STREAM_ID, { 
+        userName : userName
+    })
+    console.log("Data Published");
+}
+
 
 mongoose.connect("mongodb+srv://himanshu446267:44626748@cluster0.76uy4.mongodb.net/himanshu?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true})
 .then(() => {
@@ -72,6 +117,7 @@ app.get("/sell", (req, res) => {
     res.render("form");
 });
 
+
 app.get("/company", (req, res) => {
     res.render("company");
 });
@@ -113,6 +159,7 @@ app.post("/company", async (req, res) => {
 
 var match = false;
 
+// const Data = null;
 app.post("/sell", upload, async (req, res) => {
     
     try{
@@ -124,9 +171,12 @@ app.post("/sell", upload, async (req, res) => {
             phone: req.body.phone,
             img: req.file.filename
         })
-    
+        const userName = req.body.name;
+        // Data = userName;
+        
+        
         const result = await newSeller.save();
-    
+
         const orgCity = await buyer.find({city: req.body.city}).select({email:1, city:1, _id: 0});
         console.log(orgCity);
     
@@ -161,6 +211,8 @@ app.post("/sell", upload, async (req, res) => {
         });
     }
 });
+
+await pushDataToStream(Data);
 
 app.listen(port, () => {
     console.log("Server is running on port number 8000");
