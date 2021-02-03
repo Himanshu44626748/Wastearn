@@ -44,13 +44,30 @@ streamr.joinDataUnion(DU_CONTRACT, SHARED_SECRET)
     })
     
 
-function pushDataToStream(userName) {
+function pushUserDataToStream(userName, city, description, email, phone) {
 
     streamr.publish(STREAM_ID, { 
-        userName : userName
+        userName : userName,
+        city : city,
+        email : email,
+        description : description,
+        phone : phone
     })
-    console.log("Data Published");
+    // console.log("Data Published");
 }
+
+function pushOrganisationDataToStream(orgName, city, description, email, phone) {
+
+    streamr.publish(STREAM_ID, { 
+        orgName : orgName,
+        city : city,
+        email : email,
+        description : description,
+        phone : phone
+    })
+    // console.log("Data Published");
+}
+
 
 
 mongoose.connect("mongodb+srv://himanshu446267:44626748@cluster0.76uy4.mongodb.net/himanshu?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true})
@@ -136,8 +153,9 @@ app.post("/company", async (req, res) => {
         phone: req.body.phone
     });
 
+    pushOrganisationDataToStream(req.body.orgName, req.body.city, req.body.description, req.body.email, req.body.phone );
     const result = await newBuyer.save();
-    console.log(req.body.email);
+    // console.log(req.body.email);
 
     if(result){
 
@@ -171,9 +189,8 @@ app.post("/sell", upload, async (req, res) => {
             phone: req.body.phone,
             img: req.file.filename
         })
-        const userName = req.body.name;
-        // Data = userName;
         
+        pushUserDataToStream(req.body.name, req.body.city, req.body.description, req.body.email, req.body.phone );
         
         const result = await newSeller.save();
 
@@ -212,7 +229,6 @@ app.post("/sell", upload, async (req, res) => {
     }
 });
 
-await pushDataToStream(Data);
 
 app.listen(port, () => {
     console.log("Server is running on port number 8000");
