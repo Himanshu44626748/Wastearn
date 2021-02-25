@@ -6,6 +6,7 @@ const nodemailer = require("nodemailer");
 const bodyParser = require("body-parser");
 const app = express();
 const multer = require("multer");
+const data = require("./organisation");
 const StreamrClient = require('streamr-client')
 const port = process.env.PORT || 8000;
 // const firebase = require("firebase");
