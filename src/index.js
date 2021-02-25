@@ -86,11 +86,13 @@ const transporter = nodemailer.createTransport({
 })
 
 const sellerSchema = new mongoose.Schema({
+    wasteId: Number,
     name: String,
     city: String,
     description: String,
     email: String,
     phone: Number,
+    status: String,
     img: String
 });
 
@@ -181,30 +183,62 @@ var match = false;
 app.post("/sell", upload, async (req, res) => {
     
     try{
+
+        let id;
+
+        let data = await seller.find({});
+        const orgCity = await buyer.find({city: req.body.city});
+
+        if(data.length == 0)
+        {
+            id = 1111;
+        }
+        else{
+            let max = data[0].wasteId;
+            for(i=1;i<data.length;i++)
+            {
+                if(max < data[i].wasteId)
+                {
+                    max = data[i].wasteId;
+                }
+            }
+            id = max+1;
+        }
+
         const newSeller = new seller({
-            name: req.body.name,
-            city: req.body.city,
-            description: req.body.description,
+            wasteId: id,
+            name: req.body.name.toLowerCase(),
+            city: req.body.city.toLowerCase(),
+            description: req.body.description.toLowerCase(),
             email: req.body.email,
             phone: req.body.phone,
+            status: `Waiting for buyer`.toLowerCase(),
             img: req.file.filename
         })
+        const userName = req.body.name;
+        // Data = userName;
         
-        pushUserDataToStream(req.body.name, req.body.city, req.body.description, req.body.email, req.body.phone );
-        
+        pushUserDataToStream(id, req.body.name, req.body.city, req.body.description, req.body.email, req.body.phone);
+
         const result = await newSeller.save();
 
-        const orgCity = await buyer.find({city: req.body.city}).select({email:1, city:1, _id: 0});
-        console.log(orgCity);
+        //console.log(orgCity);
     
         if(orgCity[0].city)
         {
         
-            const mailOption = {
+            const orgMail = {
                 from: req.body.email,
                 to: orgCity[0].email,
-                subject: "Waste Found",
-                text: `${req.body.name} is selling their waste please collect it from ${req.body.city}. His contact number is - ${req.body.phone} and Email id is - ${req.body.email}`
+                subject: `${id} Waste Found`,
+                text: `${req.body.name} is selling their waste(waste id - ${id}) please collect it from ${req.body.city}. His contact number is - ${req.body.phone} and Email id is - ${req.body.email}`
+            }
+
+            const sellerMail = {
+                from: req.body.email,
+                to: req.body.email,
+                subject: "Thank you for recycling your waste",
+                text: `Dear ${req.body.name} thank you for recycling. Your waste id is ${id}`
             }
     
             console.log("Data successfully inserted");
@@ -212,21 +246,196 @@ app.post("/sell", upload, async (req, res) => {
             res.render("form", {
                 successMsg: "Thank you for recycling your waste"
             });
+
+            transporter.sendMail(sellerMail, (error, info) => {
+                if(error){
+                    console.log(error)
+                }
+                else{
+                    console.log("Mail sended to seller");
+                }
+            })
             
-            transporter.sendMail(mailOption, (error, info) => {
+            transporter.sendMail(orgMail, (error, info) => {
                 if(error){
                     console.log(error);
                 }else{
-                    console.log("Mail send");
+                    console.log("Mail sended to organisation");
                 }
             })
         }
     }catch(error){
 
+        console.log(error);
         res.render("form", {
             failMsg: "Service is currently not available in your city"
         });
     }
+
+});
+
+app.get("/org", (req, res) => {
+    res.render("organisation", {
+        st: "none"
+    });
+})
+
+app.post("/org", async (req, res) => {
+
+    try{
+        let t = await data.available(req, res, buyer);
+        //console.log(t);
+        
+        let msg = "";
+
+        if(t.length == 0)
+        {
+            msg = "No organisation found";
+        }
+
+        //console.log(msg);
+
+        res.render("organisation", {
+            org: t,
+            msg: msg
+        });
+    }
+    catch(error){
+        res.render("organisation");
+        //console.log(error);
+    }
+    //console.log(t[0].orgName);
+
+});
+
+app.get("/checkStatus", (req, res) => {
+    res.render("checkStatus");
+});
+
+app.post("/checkStatus", async (req, res) => {
+
+    try{
+
+        let wasteId = req.body.id;
+
+        let data = await seller.find({wasteId: wasteId});
+
+        //console.log(data);
+
+        if(data.length == 1)
+        {
+            res.render("checkStatus", {
+                msg: `Current Status - ${data[0].status}`,
+                id: req.body.id
+            })
+        }
+        else{
+            res.render("checkStatus", {
+                error: `No waste found`,
+                id: req.body.id
+            })
+        }
+
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+})
+
+app.get("/updateStatus", (req, res) => {
+    res.render("updateStatus");
+});
+
+app.post("/updateStatus", async (req, res) => {
+
+    var id = req.body.id;
+    var status = req.body.status;
+
+    let data = await seller.find({wasteId: id});
+    if(data.length == 1)
+    {
+        await seller.updateOne({wasteId: id}, {status: status});
+
+        res.render("updateStatus", {
+            msg: "Updated"
+        });
+        
+    }
+    else{
+        res.render("updateStatus", {
+            error: "Wrong waste id"
+        });
+    }
+    
+
+});
+
+app.get("/orgHome", async(req, res) => {
+
+    var status = 'waiting for buyer';
+
+    var data = await seller.find({status: status});
+
+    //console.log(data);
+
+    res.render("organisationHome", {
+        data: data
+    });
+});
+
+app.post("/orgHome", async(req, res) => {
+
+    try{
+
+        var filter = req.body.filter.toLowerCase();
+
+        var status = 'waiting for buyer';
+
+        if(filter === "bio" || filter === "metal" || filter === "plastic" || filter === "paper")
+        {
+            var data = await seller.find({status: status, description: filter});
+
+            //console.log(filter);
+
+            if(data.length == 0)
+            {
+                res.render("organisationHome", {
+                    msg: "No Waste Found"
+                });
+            }
+
+            else{
+                res.render("organisationHome", {
+                    data: data
+                });
+            }
+        }
+        else{
+            var data = await seller.find({status: status, city: filter});
+
+            //console.log(filter);
+            
+            if(data.length == 0)
+            {
+                res.render("organisationHome", {
+                    msg: "No Waste Found"
+                });
+            }
+
+            else{
+                res.render("organisationHome", {
+                    data: data
+                });
+            }
+        }
+
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+
 });
 
 

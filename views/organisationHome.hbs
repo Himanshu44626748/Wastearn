@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <title>WastEarn</title>
+
+    <style>
+        .card{
+            margin: 5% 0%;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        }
+
+        .card-body{
+            margin: 0% 0% 0% 3%;
+            padding: 6% 0%;
+        }
+
+        @media only screen and (max-width: 600px)
+        {
+            form{
+                margin-left: 5%;
+            }
+            #filter{
+                width: 80% !important;
+            }
+            #search{
+                width: 40%;
+            }
+            .div{
+                padding-left: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    {{> header}}
+    
+    <div class="container my-5">
+
+        <div class="div container mb-4" style="padding-left: 33%;">
+            <form action="/orgHome" method="POST" class="form-inline">
+                <input type="text" class="form-control mb-2 mr-sm-4" style="width: 40%;" name="filter" id="filter" placeholder="Search by city or waste type" required>
+                
+                <input type="submit" class="btn btn-success mb-2" id="search" value="Search" />
+            </form>
+        </div>
+
+        <div class="card-deck row">
+
+            {{#each data}}
+
+                <div class="col-xs-12 col-sm-6 col-md-4 my-3">
+                
+                    <div class="card">
+
+                        <div class="view overlay">
+                            <img class="card-img-top" src="uploads/{{this.img}}" alt="Card image cap">
+                        </div>
+
+                        <div class="card-body">
+
+                            <h4 class="card-title" style="text-transform: capitalize;">{{this.description}}</h4>
+                            
+                            <h6 class="card-text" style="text-transform: capitalize;">{{this.name}}, {{this.city}}</h6>
+
+                            <p>{{this.phone}}, {{this.email}}</p>
+                            
+                            <a type="button" class="btn btn-success btn-md" onclick="myFunction({{this.wasteId}})">Collect</a>
+
+                        </div>
+                    </div>
+                </div>
+
+            {{/each}}
+            
+        </div> 
+
+        <h5 class="text-danger" style="text-align: center;">{{msg}}</h5> 
+    </div>
+
+{{> footer}}
+
+<script>
+
+    function myFunction(id)
+    {
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/changeStatus", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+            wasteId: id
+        }));
+
+        console.log(id);
+    }
+
+</script>
+
+</body>
+</html>

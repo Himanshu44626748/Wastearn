@@ -20,9 +20,10 @@
 </head>
 <body>
 
-    {{> header}}
+        {{> header}}
 
-  <div class="container register">
+        <div class="container">
+            <div class="container register">
     <div class="row">
         <div class="col-md-3 register-left">
             <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt="not found"/>
@@ -46,7 +47,7 @@
                                 <input type="text" class="form-control" placeholder="City*" value="" id="address" name="city"/>
                             </div>
                             <div class="form-group">
-                                <input type="text" class="form-control"  placeholder="description*" value="" id="desc" name="description"/>
+                                <input type="text" class="form-control" placeholder="description*" value="" id="desc" name="description"/>
                             </div>
                             
                         </div>
@@ -76,10 +77,11 @@
             </div>
         </div>
     </div>
+        </div>
 
+    <div style="margin-top: 5%;">
+    {{>footer}}
 </div>
-
-{{>footer}}
 
 </body>
 </html>
