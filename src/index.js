@@ -7,69 +7,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const multer = require("multer");
 const data = require("./organisation");
-const StreamrClient = require('streamr-client')
 const port = process.env.PORT || 8000;
-// const firebase = require("firebase");
-const { auth } = require("./firebase");
-const privatekey = 'fc8f0ba4f6e15133610ae5ca19d34de270280ed60dadf494f052a2878fb5515c'
-const SHARED_SECRET = 'xd5Y8XmDT-OArm3gjxgfGgydnt5FwcQ8yamal29m9Dsw'
-const DU_CONTRACT = '0x2bca3b92f79d7ffb5f5a3cfa8dbcafd90a36def3'
-const STREAM_ID = '0x7b3fe72fd7a05839bd122c5cefc9964d15225aba/wastearn/v2'
-const WALLET_ADDRESS = '0x7B3Fe72Fd7A05839bd122c5CeFC9964d15225ABA'
-
-
-
-const streamr = new StreamrClient({
-    auth: {
-        privateKey: privatekey
-    },
-    url: 'wss://hack.streamr.network/api/v1/ws',
-    restUrl: 'https://hack.streamr.network/api/v1',
-})
-
-
-streamr.joinDataUnion(DU_CONTRACT, SHARED_SECRET)
-.then((memberDetails) => {
-        // console.log(memberDetails);
-
-        streamr.getMemberStats(DU_CONTRACT, WALLET_ADDRESS)
-            .then((stats) => {
-                // console.log(stats);
-            })
-            .catch((err) => {
-                console.log(err.message);
-            })
-    })
-    .catch((err) => {
-        console.log(err.message);
-    })
-    
-
-function pushUserDataToStream(userName, city, description, email, phone) {
-
-    streamr.publish(STREAM_ID, { 
-        userName : userName,
-        city : city,
-        email : email,
-        description : description,
-        phone : phone
-    })
-    // console.log("Data Published");
-}
-
-function pushOrganisationDataToStream(orgName, city, description, email, phone) {
-
-    streamr.publish(STREAM_ID, { 
-        orgName : orgName,
-        city : city,
-        email : email,
-        description : description,
-        phone : phone
-    })
-    // console.log("Data Published");
-}
-
-
 
 mongoose.connect("mongodb+srv://himanshu446267:44626748@cluster0.76uy4.mongodb.net/himanshu?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true})
 .then(() => {
@@ -82,7 +20,7 @@ const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
         user: "himanshu201952215@gmail.com",
-        pass: "201952215"
+        pass: "Him@n$hu201952215"
     }
 })
 
@@ -148,34 +86,38 @@ app.get("/buy", (req, res) => {
 
 app.post("/company", async (req, res) => {
 
-    const newBuyer = new buyer({
-        orgName: req.body.orgName,
-        city: req.body.city,
-        description: req.body.description,
-        email: req.body.email,
-        phone: req.body.phone
-    });
-
-    pushOrganisationDataToStream(req.body.orgName, req.body.city, req.body.description, req.body.email, req.body.phone );
-    const result = await newBuyer.save();
-    // console.log(req.body.email);
-
-    if(result){
-
-        console.log("Data successfully inserted");
-
-        res.render("form", {
-            successMsg: "Registered Successfully"
+    try{
+        const newBuyer = new buyer({
+            orgName: req.body.orgName,
+            city: req.body.city,
+            description: req.body.description,
+            email: req.body.email,
+            phone: req.body.phone
         });
+    
+        const result = await newBuyer.save();
+        // console.log(req.body.email);
+    
+        if(result){
+    
+            console.log("Data successfully inserted");
+    
+            res.render("form", {
+                successMsg: "Registered Successfully"
+            });
+        }
+        else{
+            console.log("Fail to insert data");
+    
+            res.render("form", {
+                failMsg: "Failed to registered. Please try again"
+            });
+        }
     }
-    else{
-        console.log("Fail to insert data");
-
-        res.render("form", {
-            failMsg: "Failed to registered. Please try again"
-        });
+    catch(e)
+    {
+        console.log(e);
     }
-
 })
 
 var match = false;
@@ -218,8 +160,6 @@ app.post("/sell", upload, async (req, res) => {
         })
         const userName = req.body.name;
         // Data = userName;
-        
-        pushUserDataToStream(id, req.body.name, req.body.city, req.body.description, req.body.email, req.body.phone);
 
         const result = await newSeller.save();
 

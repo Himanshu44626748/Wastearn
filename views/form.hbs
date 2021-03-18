@@ -17,6 +17,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <title>wasteEarn</title>
+
+  <script>
+      function validateForm()
+      {
+          var phone = document.forms["myForm"]["phone"].value;
+          if(!isNaN(phone))
+          {
+              return true;
+          }
+          else{
+              alert("Invalid phone number");
+              return false;
+          }
+      }
+  </script>
 </head>
 <body>
 
@@ -36,31 +51,31 @@
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                     <h3 class="register-heading">SELL YOUR WASTE HERE</h3>
-                    <form action="/sell" method="POST" enctype="multipart/form-data">
+                    <form name="myForm" action="/sell" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
                     <div class="row register-form" >
                         <div class="col-md-6">
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder=" Name *" value="" id="name" name="name"/>
+                                <input type="text" class="form-control" placeholder=" Name *" value="" id="name" name="name" required/>
                             </div>
                             
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="City*" value="" id="address" name="city"/>
+                                <input type="text" class="form-control" placeholder="City*" value="" id="address" name="city" required/>
                             </div>
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="description*" value="" id="desc" name="description"/>
+                                <input type="text" class="form-control" placeholder="description*" value="" id="desc" name="description" required/>
                             </div>
                             
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <input type="email" class="form-control" placeholder="Your Email *" value="" id="email" name="email"/>
+                                <input type="email" class="form-control" placeholder="Your Email *" value="" id="email" name="email" required/>
                             </div>
                             <div class="form-group">
-                                <input type="text" minlength="10" maxlength="10" name="phone" class="form-control" placeholder="Your Phone *" value="" id="phone" />
+                                <input type="text" minlength="10" maxlength="10" name="phone" class="form-control" placeholder="Your Phone *" value="" id="phone" required/>
                             </div>
                             <div class="last">
             <label for="formFile" class="form-label" >Upload the image of the waste</label>
-            <input class="form-control" type="file" id="formFile" name="image">
+            <input class="form-control" type="file" id="formFile" name="image" required>
           </div>
                             
                             
