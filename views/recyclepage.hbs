@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	  <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/ethers@5.0.7/dist/ethers.umd.js"></script>
+    <script src="https://unpkg.com/streamr-client@4.1.0-beta.0/dist/streamr-client.web.js"></script>
+<title>wasteEarn</title>
+</head>
+<body>
+
+  <div class="main">
+    
+    {{#if loggedin}}
+      {{>userHeader}}
+    {{else if orgLoggedin}}
+      {{>orgHeader}}
+    {{else}}
+      {{>header}}
+    {{/if}}
+
+  <div class="container" style="margin-top: 5%;">
+    <div class="row">
+      <div class="col-sm-6 my-auto">
+        <img class="img-fluid" src = "images/image1.PNG" >
+      </div>
+      <div id="whyrecyc" class="col-sm-6 my-auto">
+        <h2 class="font-weight-bold" style="color: rgb(12, 122, 224); font-family: 'Ubuntu', sans-serif;">Why Recycle ?</h2>
+        <p>Recycling is a daily activity for more than 100 million Americans and a great way to protect our environment and stimulate our economy. Recycling saves resources, prevents pollution, supports public health, and creates jobs. It saves money, avoids landfills, and best of all, it's easy.</p>
+      </div>
+    </div>
+  </div>
+
+
+<h2 style="margin-top: 6%; color: #ff62b9;font-family: 'Ubuntu', sans-serif;text-align: center;">Sell and Earn at following rates :</h2>
+		<br>
+		<br>
+
+<div class="container ">
+  
+
+<div class="row">
+  
+ 
+
+
+
+  
+<div class="col-sm-3 mx-auto">
+  <div class="card mx-auto" style="width:150px;height:85%;">
+    <img class="card-img-top" src="images/biodegradable.jpg" alt="Card image" style="width:100%;border-radius:20px">
+    <div class="card-body" >
+      <h3 class="card-title" style="font-family: 'Ubuntu', sans-serif;">BIO</h3>
+      <h6><p class="card-text" style="font-family: 'Ubuntu', sans-serif;">8rupees/kg</p></h6>
+      
+    </div>
+  </div>
+  <br>
+  </div>
+ 
+
+
+
+  
+<div class="col-sm-3">
+  <div class="card mx-auto" style="width:150px;height:85%;">
+    <img class="card-img-top" src="images/metal.jpg" alt="Card image" style="width:100%;border-radius:20px">
+    <div class="card-body" >
+      <h3 class="card-title" style="font-family: 'Ubuntu', sans-serif;">METAL</h3>
+     <h6> <p class="card-text" style="font-family: 'Ubuntu', sans-serif;">23rupees/kg</p></h6>
+      
+    </div>
+  </div>
+  <br>
+  
+ </div>
+
+
+
+  
+
+  <div class="col-sm-3">
+  <div class="card mx-auto" style="width:150px;height:85%;">
+    <img class="card-img-top" src="images/plastic.jpg" alt="Card image" style="width:100%;border-radius:20px">
+    <div class="card-body" >
+      <h3 class="card-title" style="font-family: 'Ubuntu', sans-serif;">PLASTIC</h3>
+      <h6><p class="card-text" style="font-family: 'Ubuntu', sans-serif;">10rupees/kg</p></h6>
+      
+    </div>
+  </div>
+  <br>
+  </div>
+ 
+
+
+<div class="col-sm-3">
+  <div class="card mx-auto" style="width:150px;height:85%;">
+    <img class="card-img-top" src="images/paper.jpg" alt="Card image" style="width:100%;border-radius:20px">
+    <div class="card-body" >
+      <h3 class="card-title" style="font-family: 'Ubuntu', sans-serif;">PAPER</h3>
+      <h6><p class="card-text" style="font-family: 'Ubuntu', sans-serif;">10rupees/kg</p></h6>
+      
+    </div>
+  </div>
+  <br>
+  </div>
+
+</div>
+</div>
+
+{{>footer}}
+  </div>
+
+</body>
+</html>
