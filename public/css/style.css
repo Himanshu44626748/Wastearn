@@ -1,0 +1,87 @@
+*{
+    box-sizing: border-box;
+}
+body{
+    display: flex;
+    flex-direction: column;
+    font-family: "Open Sans";
+    height: 100vh;
+}
+@media only screen and (max-width: 600px)
+{
+    #whyrecyc{
+        margin-top: 5% !important;
+        text-align: center;
+    }
+}
+footer{
+    background: #0bb163;
+    margin-top: auto;
+    width:100%;
+}
+footer .container{
+    width: 100%;
+    padding-top: 3%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+footer .ftr h3{
+    font-size: 1.4em;
+    margin-bottom: 1.2em;
+    color: black;
+}
+footer .content{
+    list-style:none;
+}
+footer .content a{
+    text-decoration: none;
+    color: black;
+    opacity: .6;
+    line-height: 30px;
+    transition: .3s ease opacity;
+}
+footer .content a:hover{
+    opacity: 1;
+}
+footer .ftr{
+    flex-basis: 18%;
+}
+#footerForm{
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+#subscribe, #footerMail{
+    border: none;
+    outline: none;
+    padding: 10px;
+    margin: 5px 0;
+    background: black;
+}
+.btn #subscribe{
+    background: blueviolet;
+    color: black;
+    transition: .3s ease background;
+}
+.btn #subscribe:hover{
+    background: rgb(23, 193, 216);
+}
+@media only screen and (max-width: 540px){
+    footer .ftr{
+        flex-basis: 80%;
+        margin: 0 auto;
+    }
+    form{
+        flex-direction: column;
+    }
+    form input{
+        width: 90%;
+        margin: 5px auto;
+    }
+} 
+
+.navbar-nav li:hover .dropdown-menu {
+    display: block;
+}

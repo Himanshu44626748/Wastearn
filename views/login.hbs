@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/login.css" type="text/css">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/ethers@5.0.7/dist/ethers.umd.js"></script>
+    <script src="https://unpkg.com/streamr-client@4.1.0-beta.0/dist/streamr-client.web.js"></script>
+<title>wasteEarn</title>
+</head>
+<body>
+
+{{> header}}
+
+  <div class="container">
+    <div class="main">
+    <div class="extra">
+    </div>
+    
+<div class="login-page">
+
+  <h5 class="text-danger" style="text-align: center;">{{msg}}</h5>
+
+  <div class="form">
+    <form class="register-form" action="/userLogin" method="POST">
+      <input type="text" placeholder="Name" name="name"/>
+      <input type="password" placeholder="Password" name="password"/>
+      <input type="text" placeholder="Email address" name="email"/>
+      <input type="text" placeholder="Phone Number" name="phone"/>
+      <input type="text" placeholder="Address" name="address"/>
+      <input type="text" placeholder="City" name="city"/>
+      <input type="text" placeholder="Pincode" name="pincode"/>
+
+      <button>create</button>
+      <p class="message">Already registered? <a href="/userLogin">Sign In</a></p>
+    </form>
+    <form class="login-form"  action = "/userLogin" method="POST" >
+      <input type="text" placeholder="Email" name="email"/>
+      <input type="password" placeholder="Password" name="password"/>
+      <button onclick="/profile/me">login</button>
+      <p class="message">Not registered? <a href="/userSignup">Create an account</a></p>
+    </form>
+  </div>
+</div>
+
+
+</div>
+  </div>
+
+{{>footer}}
+
+</body>
+<script>
+
+  $('.message a').click(function(){
+  $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+  });
+</script>
+</html>
+
