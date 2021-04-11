@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const multer = require("multer");
 const user = require('../models/User');
+const org = require('../models/Organisation');
 const connectDB = require('../config/db');
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -829,26 +830,26 @@ app.get("/logout", async (req, res) => {
         const orgData = await org.findOne({_id: verify._id});
 
         if(data){
-        data.tokens = data.tokens.filter((d) => {
-            return d.token != token;
-        })
+            data.tokens = data.tokens.filter((d) => {
+                return d.token != token;
+            })
         
-        res.clearCookie("jwt");
-        await data.save();
-        res.render("login", {
-            loggedin: false
-        });
+            res.clearCookie("jwt");
+            await data.save();
+            res.render("login", {
+                loggedin: false
+            });
         }
         else if(orgData){
-        orgData.tokens = orgData.tokens.filter((d) => {
-        return d.token != token;
+            orgData.tokens = orgData.tokens.filter((d) => {
+            return d.token != token;
+            })
 
-        })
-        res.clearCookie("jwt");
-        await orgData.save();
-        res.render("orgLogin", {
-            orgLoggedin: false
-        });
+            res.clearCookie("jwt");
+            await orgData.save();
+            res.render("orgLogin", {
+                orgLoggedin: false
+            });
         }
     }
     catch(e){
