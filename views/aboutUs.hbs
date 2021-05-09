@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/ethers@5.0.7/dist/ethers.umd.js"></script>
+    <script src="https://unpkg.com/streamr-client@4.1.0-beta.0/dist/streamr-client.web.js"></script>
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+.about-section {
+  padding: 50px;
+  text-align: center;
+  background:  -webkit-linear-gradient(left, #069754, #1dca82);
+  color: white;
+}
+
+.title {
+  color: grey;
+}
+
+.button {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+}
+
+.button:hover {
+  background-color: #555;
+}
+
+@media only screen and (max-width: 600px)
+{
+  .mid{
+    margin-top: 4%; 
+    margin-bottom: 4%;
+  }
+} 
+
+</style>
+</head>
+<body>
+
+    {{#if loggedin}}
+      {{>userHeader}}
+    {{else if orgLoggedin}}
+      {{>orgHeader}}
+    {{else}}
+      {{>header}}
+    {{/if}}
+
+    <div class="about-section">
+      <h2>About Us</h2>
+      <p>WE WANT TO MAKE OUR WASTE USEFULL</p>
+      <p>BELIEVE IN YOUR INSTINCTS</p>
+    </div>
+
+<h2 style="text-align:center; margin-top: 2%; margin-bottom: 2%;">Our Team</h2>
+<div class="container">
+  <div class="row" style="margin-bottom: 5%;">
+  
+  <div class="col-sm-4">
+    <div class="card">
+      <img src="images/himanshu.jpg" alt="Jane" style="height: 60%; width:100%">
+      <div class="container">
+        <h2 style="margin-top: 3%;">Himanshu Mishra</h2>
+        <p class="title">Full Stack Developer</p>
+        <p>Student of IIIT Vadodara</p>
+        <p>himanshu44626748@gmail.com</p>
+    <a href="https://www.linkedin.com/in/himanshu-mishra-a2a4801aa/">    <p><button class="button">Contact</button></p></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-4 mid">
+    <div class="card">
+      <img src="images/nikhil.jpeg" alt="Mike" style="height: 100%; width:100%">
+      <div class="container">
+        <h2 style="margin-top: 3%;">Nikhil Singh</h2>
+        <p class="title">Back End Developer</p>
+        <p>Student of IIIT Vadodara</p>
+        <p>nikhilsingh1510@gmail.com</p>
+     <a href="https://www.facebook.com/thakur.nikhilsingh.965">   <p><button class="button">Contact</button></p></a>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-sm-4">
+    <div class="card">
+      <img src="images/parth.jpeg" alt="John" style="height: 70%; width:100%">
+      <div class="container">
+        <h2 style="margin-top: 3%;">Parth Sarode</h2>
+        <p class="title">Front End Developer</p>
+        <p>Student of IIIT Vadodara</p>
+        <p>parthsarode1405@gmail.com</p>
+      <a href="https://www.facebook.com/profile.php?id=100009334313894">  <p><button class="button">Contact</button></p></a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+{{>footer}}
+
+</body>
+</html>

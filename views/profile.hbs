@@ -16,81 +16,82 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <style>
 body {
-  font-family: Arial, Helvetica, sans-serif;
   margin: 0;
+  font-family: 'Lato', sans-serif;
 }
-
-html {
-  box-sizing: border-box;
-}
-
-*, *:before, *:after {
-  box-sizing: inherit;
-}
-
-.column {
-  float: left;
-  width: 33.3%;
-  margin-bottom: 16px;
-  padding: 0 8px;
-}
-
-.card {
-  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.3);
-  margin: 8px;
-  border-radius: 25px;
-  background-color: white;
-
-  color:green;
-  transition: box- 3s;
-
-}
-.card:hover{
-  box-shadow: 0px 8px 16px 0px  rgba(0,0,0,0.6);
-}
-.about-section {
-  padding: 50px;
-  text-align: center;
-  background-color: green;
-  color: white;
-}
-
-.container {
-  padding: 0 16px;
-}
-
-.container::after, .row::after {
-  content: "";
-  clear: both;
-  display: table;
-}
-
-.title {
-  color: grey;
-}
-
 .button {
-  border: none;
-  outline: 0;
-  display: inline-block;
-  padding: 8px;
+
+  background: -webkit-linear-gradient(left, #069754, #32eb9e);
   color: white;
-  background-color: #000;
-  border-radius: 20px;
+  padding: 15px 32px;
   text-align: center;
-  cursor: pointer;
-  width: 100%;
+  text-decoration: none;
+  border: none;
+  border-radius: 10px;
 }
 
-.button:hover {
-  background-color: #555;
+.head {
+  min-height: 60vh;
+  background:  -webkit-linear-gradient(left, #069754, #32eb9e);
+  color: white;
+  clip-path: ellipse(100vw 60vh at 50% 50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 350px;
+  margin-top: 0px;
 }
 
-@media screen and (max-width: 650px) {
-  .column {
-    width: 100%;
-    display: block;
-  }
+@media only screen and (max-width: 600px)
+{
+  .head{
+      min-height: 70vh;
+    }
+    .profile-pic{
+      margin-top: 3%;
+    }
+}
+
+.details {
+  text-align: center;
+}
+
+.profile-pic {
+  height: 6rem;
+  width: 6rem;
+  object-fit: center;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+.location p {
+  display: inline-block;
+}
+
+.location svg {
+  vertical-align: middle;
+}
+
+.stats {
+  display: flex;
+}
+
+.stats .col-4 {
+  width: 10rem;
+  text-align: center;
+}
+
+@media only screen and (min-width: 600px)
+{
+  .myCol{
+      width: 10rem;
+    }
+}
+
+.heading {
+  font-weight: 400;
+  font-size: 1.3rem;
+  margin: 1rem 0;
 }
 </style>
 </head>
@@ -98,91 +99,75 @@ html {
 
   {{>userHeader}}
 
-<div class="container">
-  <div class="about-section">
-  <h1>Profile</h1>
-  <p>WE WANT TO MAKE OUR WASTE USEFULL</p>
-  <p>BELIEVE IN YOUR INSTINCTS</p>
-</div>
-<hr>
-
-<div class="row">
-
-  
-  <div class="column">
-    <div class="card">
-      <img src="C:\Users\Dr. Milind\Desktop\aboutus\parth.png" alt="John" style="width:100%;border-radius: 20px;">
-      <div class="container">
-        <h2>{{n}}</h2>
-        <p class="title">{{add}}</p>
-        <p>{{ci}}</p>
-        <p>{{em}}</p>
-      <a href="/sell">  <p><button class="button"> SELL</button></p></a>
-      </div>
-    </div>
-  </div>
-
-  <div class = "column">
-    <div class="card">
-     
-      <div class="container">
-        <h2>Coins Earned :</h2>
-        <p>These are total coins earned from the day 1 .  </p>
-        <hr>
-        <h2 style="text-align: center;"> 6285 </h2>      
-      </div>
-    </div>
-    <div class="card">
-     
-      <div class="container">
-        <h2>Coins Remaining :</h2>
-      
-        <hr>
-        <h2 style="text-align: center;"> 2740 </h2>      
-      </div>
-    </div>
-<div class="card">
-     
-      <div class="container">
-        <h2>Coins Spent :</h2>
-       
-        <hr>
-        <h2 style="text-align: center;"> 3545 </h2>      
-      </div>
-    </div>
-    <div class="card">
-     
-      <div class="container">
-        <h2>HISTORY :</h2>
+<div>
+  <section class="profile">
+  <header class="head">
+    <div class="details">
+      <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="John Doe" class="profile-pic">
+      <h1 class="heading" style="text-transform: capitalize;">{{n}}</h1>
+      <div class="location">
         
-         
-        <p><button class="button"> Check History</button></p>
-        <hr>
-        <h2 style="text-align: center;">Coins earned yesterday : 11 </h2>      
+        <p>{{add}}</p>
       </div>
-    </div>
-
-  </div>
-
-<div class="column">
-  <div class="card">
-      <img src="C:\Users\Dr. Milind\Desktop\recyc\metal.jpg" alt="ohn" style="width:100% ; border-radius: 20px;">
-      <div class="container">
-       <h2>Status : </h2>
-       <h3>Type of Waste :</h3>
-       
-        <hr>
-        <h2>Currently Selling Waste</h2>
+      <div class="row">
+        <div class="col-sm-4 myCol">
+          <h4>{{earned}}</h4>
+          <p>Coins earned</p>
+        </div>
+        <div class="col-sm-4 myCol">
+          <h4>{{spent}}</h4>
+          <p>Redeemed</p>
+        </div>
+        <div class="col-sm-4 myCol">
+          <h4>{{rem}}</h4>
+          <p>Coins  left</p>
+        </div>
+      </div>
+      <div class="location">
         
-  
+    {{!-- <button class="button">Sell</button> --}}
+    <a href="/sell">  <p><button class="button"> Sell</button></p></a>
       </div>
     </div>
-</div>
-
-</div>
-
+  </header>
+</section>
 </div>
 
 {{>footer}}
+
 </body>
 </html>
+
+
+{{!-- 
+
+<section class="profile">
+  <header class="header">
+    <div class="details">
+      <img src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-0.3.5&q=85&fm=jpg&crop=entropy&cs=srgb&ixid=eyJhcHBfaWQiOjE0NTg5fQ&s=b38c22a46932485790a3f52c61fcbe5a" alt="John Doe" class="profile-pic">
+      <h1 class="heading">Claire Doe</h1>
+      <div class="location">
+        
+        <p>Greennagar , PInkpoor</p>
+      </div>
+      <div class="stats">
+        <div class="col-4">
+          <h4>20</h4>
+          <p>Coins earned</p>
+        </div>
+        <div class="col-4">
+          <h4>10</h4>
+          <p>REdeemed</p>
+        </div>
+        <div class="col-4">
+          <h4>100</h4>
+          <p>Coins  left</p>
+        </div>
+      </div>
+      <div class="location">
+        
+    <button class="button">Sell</button>
+      </div>
+    </div>
+  </header>
+</section> --}}

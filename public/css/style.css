@@ -15,7 +15,7 @@ body{
     }
 }
 footer{
-    background: #0bb163;
+    background:  -webkit-linear-gradient(left, #069754, #1dca82);
     margin-top: auto;
     width:100%;
 }

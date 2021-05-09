@@ -1,3 +1,6 @@
+const user = require('../models/user');
+const org = require('../models/Organisation');
+const voterList = require('../models/voterList');
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
@@ -6,8 +9,6 @@ const nodemailer = require("nodemailer");
 const bodyParser = require("body-parser");
 const app = express();
 const multer = require("multer");
-const user = require('../models/User');
-const org = require('../models/Organisation');
 const connectDB = require('../config/db');
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -15,7 +16,7 @@ require('dotenv').config();
 var cookieParser = require('cookie-parser')
 const port = process.env.PORT || 8000;
 
-mongoose.connect("mongodb+srv://himanshu446267:44626748@cluster0.76uy4.mongodb.net/himanshu?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
+mongoose.connect(`mongodb+srv://${process.env.mongoId}:${process.env.mongoPass}@cluster0.76uy4.mongodb.net/himanshu?retryWrites=true&w=majority`, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
 .then(() => {
     console.log("Connected to database");
 }).catch((error) => {
@@ -32,8 +33,8 @@ app.use(express.json({
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-        user: "himanshu201952215@gmail.com",
-        pass: "Him@n$hu201952215"
+        user: process.env.user,
+        pass: process.env.pass
     }
 })
 
@@ -62,7 +63,7 @@ hbs.registerPartials(partial);
 app.get("/", async (req, res) => {
     try{
         const token = req.cookies.jwt;
-        const verify = jwt.verify(token, "wastearndevelopedbyteamblackpearl");
+        const verify = jwt.verify(token, process.env.SECRET_KEY);
         var data = await user.findOne({_id: verify._id});
         var orgData = await org.findOne({_id: verify._id});
         if(data) {
@@ -85,7 +86,7 @@ app.get("/", async (req, res) => {
 app.get("/sell", async (req, res) => {
     try{
         const token = req.cookies.jwt;
-        const verify = jwt.verify(token, "wastearndevelopedbyteamblackpearl");
+        const verify = jwt.verify(token, process.env.SECRET_KEY);
         var data = await user.findOne({_id: verify._id});
         res.render("form", {
             n: data.name,
@@ -103,7 +104,7 @@ app.get("/sell", async (req, res) => {
 app.get("/company", (req, res) => {
     try{
         const token = req.cookies.jwt;
-        const verify = jwt.verify(token, "wastearndevelopedbyteamblackpearl");
+        const verify = jwt.verify(token, process.env.SECRET_KEY);
         res.render("company", {
             loggedin: true
         });
@@ -118,7 +119,7 @@ app.get("/company", (req, res) => {
 app.get("/buy", (req, res) => {
     try{
         const token = req.cookies.jwt;
-        const verify = jwt.verify(token, "wastearndevelopedbyteamblackpearl");
+        const verify = jwt.verify(token, process.env.SECRET_KEY);
         res.render("buy", {
             loggedin: true
         });
@@ -133,7 +134,7 @@ app.get("/buy", (req, res) => {
 app.get("/org", async (req, res) => {
     try{
         const token = req.cookies.jwt;
-        const verify = jwt.verify(token, "wastearndevelopedbyteamblackpearl");
+        const verify = jwt.verify(token, process.env.SECRET_KEY);
         var data = await user.findOne({_id: verify._id});
         res.render("organisation", {
             n: data.name,
@@ -159,7 +160,7 @@ app.post("/sell", upload, async (req, res) => {
 
 
         const token = req.cookies.jwt;
-        const verify = jwt.verify(token, "wastearndevelopedbyteamblackpearl");
+        const verify = jwt.verify(token, process.env.SECRET_KEY);
         var d = await user.findOne({_id: verify._id});
 
 
@@ -169,12 +170,13 @@ app.post("/sell", upload, async (req, res) => {
         var state = req.body.state.toLowerCase()
         var status = `Waiting for buyer`.toLowerCase()
         var img = req.file.filename
+        var voteCount = 0;
 
         // Data = userName;
 
         //console.log(d);
 
-        await d.createNewSell(type, address, city, state, status, img);
+        await d.createNewSell(type, address, city, state, status, img, voteCount);
 
         //console.log(orgCity);
     
@@ -201,7 +203,7 @@ app.post("/org", async (req, res) => {
         let t = await org.find({city});
 
         const token = req.cookies.jwt;
-        const verify = jwt.verify(token, "wastearndevelopedbyteamblackpearl");
+        const verify = jwt.verify(token, process.env.SECRET_KEY);
         var data = await user.findOne({_id: verify._id});
         //console.log(t);
         
@@ -232,7 +234,7 @@ app.post("/org", async (req, res) => {
 app.get("/checkStatus" , async (req, res) => {
     try{
         const token = req.cookies.jwt;
-        const verify = jwt.verify(token, "wastearndevelopedbyteamblackpearl");
+        const verify = jwt.verify(token, process.env.SECRET_KEY);
         var data = await user.findOne({_id: verify._id});
 
         var wastes = data.wastes;
@@ -262,7 +264,7 @@ app.get("/checkStatus" , async (req, res) => {
 
 app.get("/updateStatus", async(req, res) => {
     const token = req.cookies.jwt;
-    const verify = jwt.verify(token, "wastearndevelopedbyteamblackpearl");
+    const verify = jwt.verify(token, process.env.SECRET_KEY);
     var data = await org.findOne({_id: verify._id});
 
     res.render("updateStatus", {
@@ -280,7 +282,7 @@ app.post("/updateStatus", async (req, res) => {
         var data = await user.findOne({wastes:{$elemMatch:{_id: id}}});
 
         const token = req.cookies.jwt;
-        const verify = jwt.verify(token, "wastearndevelopedbyteamblackpearl");
+        const verify = jwt.verify(token, process.env.SECRET_KEY);
         var d = await org.findOne({_id: verify._id});
 
         if(data.wastes.length > 0)
@@ -323,7 +325,7 @@ app.get("/orgHome", async(req, res) => {
     var status = 'waiting for buyer';
 
     const token = req.cookies.jwt;
-    const verify = jwt.verify(token, "wastearndevelopedbyteamblackpearl");
+    const verify = jwt.verify(token, process.env.SECRET_KEY);
     var d = await org.findOne({_id: verify._id});
 
     var data = await user.find();
@@ -335,7 +337,7 @@ app.get("/orgHome", async(req, res) => {
         var w = data[i].wastes.length;
         for(j=0;j<w;j++)
         {
-            if(data[i].wastes[j].status === status)
+            if(data[i].wastes[j].status === status && data[i].wastes[j].voteCount >= 2)
             {
                 arr.push({
                     id: `${data[i].wastes[j]._id}`,
@@ -361,7 +363,7 @@ app.post("/orgHome", async(req, res) => {
     try{
 
         const token = req.cookies.jwt;
-        const verify = jwt.verify(token, "wastearndevelopedbyteamblackpearl");
+        const verify = jwt.verify(token, process.env.SECRET_KEY);
         var d = await org.findOne({_id: verify._id});
 
         var filter = req.body.filter.toLowerCase();
@@ -380,7 +382,7 @@ app.post("/orgHome", async(req, res) => {
 
                 for(j=0;j<w;j++)
                 {
-                    if(data[i].wastes[j].type === filter)
+                    if(data[i].wastes[j].type === filter && data[i].wastes[j].voteCount >= 2)
                     {
                         arr.push({
                             id: data[i].wastes[j]._id,
@@ -424,7 +426,7 @@ app.post("/orgHome", async(req, res) => {
 
                 for(j=0;j<w;j++)
                 {
-                    if(data[i].wastes[j].city === filter)
+                    if(data[i].wastes[j].city === filter && data[i].wastes[j].voteCount >= 2)
                     {
                         arr.push({
                             id: data[i].wastes[j]._id,
@@ -470,17 +472,22 @@ app.post("/changeStatus", async(req, res) => {
         var data = await user.findOne({wastes:{$elemMatch:{_id: req.body.wasteId}}});
 
         const token = req.cookies.jwt;
-        const verify = jwt.verify(token, "wastearndevelopedbyteamblackpearl");
+        const verify = jwt.verify(token, process.env.SECRET_KEY);
         const orgData = await org.findOne({_id: verify._id});
-      
+        console.log(req.body.credits);
         for(i=0;i<data.wastes.length;i++)
         {
             if(req.body.wasteId == data.wastes[i]._id)
             {
-                data.wastes[i].status = `Processing under ${orgData.name}`
+                if(req.body.credits!==NaN){
+                    data.wastes[i].status = `buyer org: ${orgData.name}`;
+                    data.coinsearned = parseInt(req.body.credits)+parseInt(data.coinsearned);
+                    data.coinsrem = parseInt(data.coinsearned)-parseInt(data.coinsspent);
+                }
             }
         }
 
+        console.log("Current status");
         await data.save();
 
         var status = 'waiting for buyer';
@@ -536,7 +543,10 @@ app.post("/userSignup", async(req, res) => {
             phone: req.body.phone,
             address: req.body.address.toLowerCase(),
             city: req.body.city.toLowerCase(),
-            pincode: req.body.pincode
+            pincode: req.body.pincode,
+            coinsearned: 0,
+            coinsspent: 0,
+            coinsrem: 0
         });
 
         const token = await newUser.generateAuthToken();
@@ -549,7 +559,10 @@ app.post("/userSignup", async(req, res) => {
         res.render("profile", {
             n: req.body.name,
             e: req.body.email,
-            loggedin: true
+            loggedin: true,
+            earned: 0,
+            spent: 0,
+            rem: 0
         });
         
     } catch (error) {
@@ -567,13 +580,12 @@ app.post("/orgSignup", async(req, res) => {
         pass = await bcrypt.hash(req.body.password, 10);
 
         const newOrg = new org({
-            name: req.body.name.toLowerCase(),
-            orgName: req.body.orgName.toLowerCase(),
+            name: await req.body.name.toLowerCase(),
             password: pass,
             email: req.body.email,
             phone: req.body.phone,
-            address: req.body.address.toLowerCase(),
-            city: req.body.city.toLowerCase(),
+            address: await req.body.address.toLowerCase(),
+            city: await req.body.city.toLowerCase(),
             pincode: req.body.pincode            
         });
 
@@ -602,7 +614,7 @@ app.post("/orgSignup", async(req, res) => {
 app.get("/userLogin", async (req, res) => {
     try{
         const token = req.cookies.jwt;
-        const verify = jwt.verify(token, "wastearndevelopedbyteamblackpearl");
+        const verify = jwt.verify(token, process.env.SECRET_KEY);
         var data = await user.findOne({_id: verify._id});
         res.render("login", {
             n: data.name,
@@ -640,14 +652,19 @@ app.post("/userLogin", async (req, res) => {
                 
                 var name = data.name;
                 var email = data.email;
-
+                var coinsearned = data.coinsearned;
+                var coinsrem = data.coinsrem;
+                var coinsspent = data.coinsspent;
                 if(resp == true)
                 {
                     console.log("Password match");
                     res.render("profile", {
                         n: name,
                         e: email,
-                        loggedin: true
+                        loggedin: true,
+                        earned: coinsearned,
+                        spent: coinsspent,
+                        rem: coinsrem
                     });
                 }
                 else{
@@ -675,7 +692,7 @@ app.post("/userLogin", async (req, res) => {
 app.get("/orgLogin", async (req, res) => {
     try{
         const token = req.cookies.jwt;
-        const verify = jwt.verify(token, "wastearndevelopedbyteamblackpearl");
+        const verify = jwt.verify(token, process.env.SECRET_KEY);
         var data = await org.findOne({_id: verify._id});
         res.render("orgLogin", {
             n: data.name,
@@ -807,13 +824,19 @@ app.post("/sell", async (req, res) => {
 app.get("/profile", async (req, res) => {
     try{
         const token = req.cookies.jwt;
-        const verify = jwt.verify(token, "wastearndevelopedbyteamblackpearl");
+        const verify = jwt.verify(token, process.env.SECRET_KEY);
         var data = await user.findOne({_id: verify._id});
         var name = data.name;
         var email = data.email;
+        var coinsearned = data.coinsearned;
+        var coinsrem = data.coinsrem;
+        var coinsspent = data.coinsspent;
         res.render("profile", {
             n: name,
-            e: email
+            e: email,
+            earned: coinsearned,
+            spent: coinsspent,
+            rem: coinsrem
         });
     }
     catch(e){
@@ -824,36 +847,166 @@ app.get("/profile", async (req, res) => {
 app.get("/logout", async (req, res) => {
     try{
         const token = req.cookies.jwt;
-        const verify = jwt.verify(token, "wastearndevelopedbyteamblackpearl");
+        const verify = await jwt.verify(token, process.env.SECRET_KEY);
 
         const data = await user.findOne({_id: verify._id});
         const orgData = await org.findOne({_id: verify._id});
 
         if(data){
-            data.tokens = data.tokens.filter((d) => {
-                return d.token != token;
-            })
+        data.tokens = data.tokens.filter((d) => {
+            return d.token != token;
+        })
         
-            res.clearCookie("jwt");
-            await data.save();
-            res.render("login", {
-                loggedin: false
-            });
+        res.clearCookie("jwt");
+        await data.save();
+        res.render("login", {
+            loggedin: false
+        });
         }
         else if(orgData){
-            orgData.tokens = orgData.tokens.filter((d) => {
-            return d.token != token;
-            })
+        orgData.tokens = orgData.tokens.filter((d) => {
+        return d.token != token;
 
-            res.clearCookie("jwt");
-            await orgData.save();
-            res.render("orgLogin", {
-                orgLoggedin: false
-            });
+        })
+        res.clearCookie("jwt");
+        await orgData.save();
+        res.render("orgLogin", {
+            orgLoggedin: false
+        });
         }
     }
     catch(e){
         console.log(e);
+    }
+})
+
+app.get("/vote", async(req, res) => {
+    var status = 'waiting for buyer';
+
+    const token = req.cookies.jwt;
+    const verify = await jwt.verify(token, process.env.SECRET_KEY);
+    const d = await user.findOne({_id: verify._id});
+
+    var data = await user.find();
+
+    var arr = [];
+
+    for(i=0;i<data.length;i++)
+    {
+        var w = data[i].wastes.length;
+        if(verify._id != data[i]._id)
+        {
+            for(j=0;j<w;j++)
+            {
+                const voter = await voterList.findOne({wasteId: data[i].wastes[j]._id, userId: verify._id})
+                if(data[i].wastes[j].status === status && voter == null)
+                {
+                    arr.push({
+                        id: `${data[i].wastes[j]._id}`,
+                        name: data[i].name,
+                        email: data[i].email,
+                        phone: data[i].phone,
+                        city: data[i].wastes[j].city,
+                        type: data[i].wastes[j].type,
+                        img: data[i].wastes[j].img
+                    })
+                }
+            }
+        }
+    }
+
+    res.render("vote", {
+        data: arr,
+        n: d.name
+    });
+});
+
+app.post("/voteCount", async(req, res)=> {
+    try{
+
+        const token = req.cookies.jwt;
+        const verify = await jwt.verify(token, process.env.SECRET_KEY);
+        const u = await user.findOne({_id: verify._id});
+
+        const newVoter = new voterList({
+            userId: u._id,
+            wasteId: req.body.wasteId
+        });
+
+        await newVoter.save();
+    
+        var data = await user.findOne({wastes:{$elemMatch:{_id: req.body.wasteId}}});
+        //console.log(data);
+
+        var l = data.wastes.length;
+        
+        for(i=0;i<l;i++)
+        {
+            if(data.wastes[i]._id == req.body.wasteId)
+            {
+                data.wastes[i].voteCount += 1;
+                break;
+            }
+        }
+
+        await data.save();
+
+        var status = 'waiting for buyer';
+        const d = await user.find();
+
+        var arr = [];
+
+        for(i=0;i<d.length;i++)
+        {
+            var w = d[i].wastes.length;
+            for(j=0;j<w;j++)
+            {
+                if(d[i].wastes[j].status === status)
+                {
+                    arr.push({
+                        id: d[i].wastes[j]._id,
+                        name: d[i].name,
+                        email: d[i].email,
+                        phone: d[i].phone,
+                        city: d[i].wastes[j].city,
+                        type: d[i].wastes[j].type,
+                        img: d[i].wastes[j].img
+                    })
+                }
+            }
+        }
+        res.render("vote", {
+            data: arr,
+            n: u.name,
+            voted: true
+        });
+    }
+    catch(e)
+    {
+        console.log(e);
+    }
+});
+
+app.get("/aboutUs", async(req, res) => {
+    try{
+        const token = req.cookies.jwt;
+        const verify = jwt.verify(token, process.env.SECRET_KEY);
+        var data = await user.findOne({_id: verify._id});
+        var orgData = await org.findOne({_id: verify._id});
+        if(data) {
+            res.render("aboutUs", {
+                n: data.name,
+                loggedin: true, 
+            });
+        } else if(orgData){
+            res.render("aboutUs", {
+                n:orgData.name,
+                orgLoggedin: true
+            })
+        }
+    }
+    catch(e){
+        res.render("aboutUs");
     }
 })
 

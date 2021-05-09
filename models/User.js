@@ -9,19 +9,24 @@ const userSchema = new mongoose.Schema({
     address: String,
     city: String,
     pincode: Number,
+    coinsearned:Number,
+    coinsspent:Number,
+    coinsrem:Number,
     wastes: [{
         type: String,
         address: String,
         city: String,
         state: String,
         status: String,
+        voteCount: Number,
         img: String
     }],
     tokens: [{
         token: String
     }],
 },
-{ typeKey: '$type' })
+{ typeKey: '$type' }
+)
 
 
 userSchema.methods.generateAuthToken = async function(){
@@ -38,7 +43,7 @@ userSchema.methods.generateAuthToken = async function(){
     }
 }
 
-userSchema.methods.createNewSell = async function(type, address, city, state, status, img){
+userSchema.methods.createNewSell = async function(type, address, city, state, status, img, vc){
     try{
         const waste = {
             "type": type,
@@ -46,6 +51,7 @@ userSchema.methods.createNewSell = async function(type, address, city, state, st
             "city": city,
             "state": state,
             "status": status,
+            "voteCount": vc,
             "img": img
         }
         

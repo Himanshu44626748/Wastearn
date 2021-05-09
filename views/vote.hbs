@@ -118,17 +118,9 @@
 </head>
 <body>
 
-    {{> orgHeader}}
+    {{> userHeader}}
     
     <div class="container my-5">
-
-        <div class="div container mb-4" style="padding-left: 33%;">
-            <form action="/orgHome" method="POST" class="form-inline">
-                <input type="text" class="form-control mb-2 mr-sm-4" style="width: 40%;" name="filter" id="filter" placeholder="Search by city or waste type" required>
-                
-                <input type="submit" class="btn btn-success mb-2" id="search" value="Search" />
-            </form>
-        </div>
 
         <div class="card-deck row">
 
@@ -151,7 +143,7 @@
                             <p>{{this.phone}} <br /> {{this.email}}</p>
                             <p style="font-size: small;"><strong>Waste ID - </strong>{{this.id}}</p>
                             
-                            <button type="submit" class="btn btn-success btn-md" onclick="myFunction('{{this.id}}')">Collect</button>
+                            <button type="submit" class="btn btn-success btn-md" onclick="myFunction('{{this.id}}')">Vote</button>
 
                         </div>
                     </div>
@@ -170,14 +162,11 @@
 
     function myFunction(id)
     {
-        var credit = prompt("enter credits");
-        console.log(credit);
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/changeStatus", false);
+        xhr.open("POST", "/voteCount", false);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify({
             wasteId: id,
-            credits: credit
         }));
         window.location.reload();
     }
