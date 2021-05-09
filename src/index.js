@@ -1,4 +1,4 @@
-const user = require('../models/user');
+const user = require('../models/User');
 const org = require('../models/Organisation');
 const voterList = require('../models/voterList');
 const express = require("express");
