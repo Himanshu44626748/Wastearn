@@ -987,29 +987,6 @@ app.post("/voteCount", async(req, res)=> {
     }
 });
 
-app.get("/aboutUs", async(req, res) => {
-    try{
-        const token = req.cookies.jwt;
-        const verify = jwt.verify(token, process.env.SECRET_KEY);
-        var data = await user.findOne({_id: verify._id});
-        var orgData = await org.findOne({_id: verify._id});
-        if(data) {
-            res.render("aboutUs", {
-                n: data.name,
-                loggedin: true, 
-            });
-        } else if(orgData){
-            res.render("aboutUs", {
-                n:orgData.name,
-                orgLoggedin: true
-            })
-        }
-    }
-    catch(e){
-        res.render("aboutUs");
-    }
-})
-
 app.listen(port, () => {
     console.log("Server is running on port number 8000");
 });
