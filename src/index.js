@@ -337,7 +337,7 @@ app.get("/orgHome", async(req, res) => {
         var w = data[i].wastes.length;
         for(j=0;j<w;j++)
         {
-            if(data[i].wastes[j].status === status && data[i].wastes[j].voteCount >= 2)
+            if(data[i].wastes[j].status === status)
             {
                 arr.push({
                     id: `${data[i].wastes[j]._id}`,
@@ -642,7 +642,6 @@ app.post("/userLogin", async (req, res) => {
         if(data)
         {
             const token = await data.generateAuthToken();
-            //console.log(token);
 
             res.cookie("jwt", token, {
                 httpOnly: true

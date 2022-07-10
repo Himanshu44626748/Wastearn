@@ -1,1 +1,1 @@
-mongodb+srv://${process.env.mongoId}:${process.env.mongoPass}@cluster0.76uy4.mongodb.net/himanshu?retryWrites=true&w=majority`
+bcrypt
